@@ -1,0 +1,30 @@
+// startTime: 10:23
+// finishTime: 11:30  Finally, with the help of the answer in "Discuss".
+// https://leetcode.com/problems/trapping-rain-water/
+
+public class Solution {
+    public int trap(int[] height) {
+        int res = 0;
+        if(height.length<3)
+        return 0;
+        
+        int l = 0;
+        int r = height.length-1;
+        while(l<r&&height[l+1]>=height[l]) l++;
+        while(l<r&&height[r-1]>=height[r]) r--;
+        
+        while(l<r){
+            int lWater = height[l];
+            int rWater = height[r];
+            if(lWater<=rWater){
+                while(l<r&&lWater>=height[++l])
+                res = res + lWater-height[l];
+            }
+            else if(lWater>rWater){
+                while(l<r&&rWater>=height[--r])
+                res = res + rWater-height[r];
+            }
+        }
+        return res;
+    }
+}
