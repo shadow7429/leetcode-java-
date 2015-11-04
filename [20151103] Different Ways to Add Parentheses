@@ -1,0 +1,43 @@
+// startTime: 20:29
+// finishTime: 21:01
+// https://leetcode.com/problems/different-ways-to-add-parentheses/
+
+public class Solution {
+    public List<Integer> diffWaysToCompute(String input) {
+        List<Integer> res = new ArrayList<Integer>();
+        if(input.length()==0)
+        return res;
+        
+        for(int i = 0; i<input.length()-1; i++){
+            if(input.charAt(i)=='+'
+            ||input.charAt(i)=='-'
+            ||input.charAt(i)=='*'){
+            List<Integer> resL = diffWaysToCompute(input.substring(0,i));
+            List<Integer> resR = diffWaysToCompute(input.substring(i+1));
+            for(int vall: resL)
+            for(int valr: resR){
+                if(input.charAt(i)=='+')
+                res.add(vall + valr);
+                else if(input.charAt(i)=='-')
+                res.add(vall - valr);
+                else if(input.charAt(i)=='*')
+                res.add(vall * valr);
+            }
+            }
+        }
+        if(res.size()==0)
+        res.add(new Integer(input));
+        
+        return res;
+    }
+}
+
+/*
+写给自己加深印象：
+这道题就是本身递归调用，每遇到一个符号就对左右进行递归调用，然后将左右返回值进行加减乘。需要注意的是，
+if(res.size()==0)res.add(new Integer(input));这一句，因为可能左边或者右边只有一个数字，没有符号，这个时候并不会进入前面的if判断，
+所以得到的res会为空，所以我们只需要把这个int加入到res中即可。
+最开始的疑惑：
+开始不懂这里面会不会出现重复，就是加括号情况的重复。但实际上我们以每一个符号进行string的分割，就是将该符号作为进行的最后一步操作了，
+因此每一个都不同，即便结果相同，加括号的情况也是不同的。
+*/
