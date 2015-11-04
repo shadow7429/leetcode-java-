@@ -4,31 +4,24 @@
 
 public class Solution {
     public int[] twoSum(int[] nums, int target) {
-        if(nums.length<2)
-        return new int[2];
+        if (nums.length < 2) return new int[2];
         int[] res = new int[2];
-        
         List<Integer> help = new ArrayList<Integer>();
-        for(int i = 0; i<nums.length; i++)
-        help.add(nums[i]);
-        
-        for(int i = 0; i<nums.length; i++)
-        {
+        for (int i = 0; i < nums.length; i++) help.add(nums[i]);
+        for (int i = 0; i < nums.length; i++) {
             int remain = target - nums[i];
-            if(!help.contains(remain))
-            continue;
-            if(remain==nums[i]){
-               if(help.indexOf(remain)==help.lastIndexOf(remain))
-                continue;
-                else {
-                    res[0] = help.indexOf(remain)+1;
-                    res[1] = help.lastIndexOf(remain)+1;
+            if (!help.contains(remain)) continue;
+            if (remain == nums[i]){
+               if (help.indexOf(remain)==help.lastIndexOf(remain)) continue;
+               else {
+                    res[0] = help.indexOf(remain) + 1;
+                    res[1] = help.lastIndexOf(remain) + 1;
                     break;
                 } 
             }
             else {
-                res[0] = i+1;
-                res[1] = help.indexOf(remain)+1;
+                res[0] = i + 1;
+                res[1] = help.indexOf(remain) + 1;
                 Arrays.sort(res);
                 break;
             }
