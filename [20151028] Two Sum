@@ -12,7 +12,7 @@ public class Solution {
             int remain = target - nums[i];
             if (!help.contains(remain)) continue;
             if (remain == nums[i]){
-               if (help.indexOf(remain)==help.lastIndexOf(remain)) continue;
+               if (help.indexOf(remain) == help.lastIndexOf(remain)) continue;
                else {
                     res[0] = help.indexOf(remain) + 1;
                     res[1] = help.lastIndexOf(remain) + 1;
