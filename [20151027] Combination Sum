@@ -11,15 +11,13 @@ public class Solution {
         return res;
     }
     public void helper(int[] candidates, int remain, List<Integer> combination, List<List<Integer>> res){
-        if(remain==0){
+        if (remain == 0){
             Collections.sort(combination);
-            if(!res.contains(combination))
-            res.add(combination);
+            if (!res.contains(combination)) res.add(combination);
             return;
         }
-        for(int c: candidates){
-            if(remain-c<0)
-            break;
+        for(int c : candidates){
+            if (remain - c < 0) break;
             List<Integer> tmp = new ArrayList<Integer>(combination);
             tmp.add(c);
             helper(candidates, remain-c, tmp, res);
