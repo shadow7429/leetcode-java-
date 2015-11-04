@@ -1,0 +1,31 @@
+// startTime: 9:50
+// finishTime: 10:55
+// https://leetcode.com/problems/partition-list/
+
+public class Solution {
+    public ListNode partition(ListNode head, int x) {
+        ListNode less = new ListNode(0);
+        ListNode larger = new ListNode(0);
+        ListNode res = less;
+        ListNode concate = larger;
+        
+        while (head != null){
+            if (head.val < x){
+               less.next = new ListNode(head.val);
+               less = less.next;
+            }
+            else {
+                larger.next = new ListNode(head.val);
+                larger = larger.next;
+            }
+            head = head.next;
+        }
+        less.next = concate.next;
+        return res.next;
+    }
+}
+
+/*
+开始尝试着在原来的List上进行操作，没成功，后面改成用两段分别存储比目标值大的和比目标值小的两段，然后进行拼接。
+自己对于这种链表的题有些不上手，需要加强练习。
+*/
