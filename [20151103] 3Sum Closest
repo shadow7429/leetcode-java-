@@ -1,0 +1,33 @@
+// startTime: 1:50
+// finishTime: 2:22
+// https://leetcode.com/problems/3sum-closest/
+
+public class Solution {
+    public int threeSumClosest(int[] nums, int target) {
+        if (nums.length < 3) return 0;
+        Arrays.sort(nums);
+        
+        int sum = 1000;
+        
+        for (int i = 0; i < nums.length - 2; i++){
+            int sumTmp = 1000;
+            int lo = i + 1;
+            int hi = nums.length - 1;
+            
+            while (lo < hi){
+                int tmp = nums[i] + nums[lo] + nums[hi]; 
+                if (Math.abs(target - tmp) < Math.abs(target - sumTmp)) sumTmp = tmp;
+                if (tmp < target) lo++;
+                else 
+                if (tmp > target) hi--;
+                else return target;
+            }
+        if (Math.abs(target - sumTmp) < Math.abs(target - sum)) sum = sumTmp;
+        }
+        
+        return sum;
+    }
+}
+/*
+这里面有可以优化的地方，一是不必要lo~hi从头到尾的这样遍历，二是对于sumTmp等的初始值有些投机取巧，不是全部适用。明天改进。
+*/
