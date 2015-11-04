@@ -5,29 +5,24 @@
 public class Solution {
     public List<Integer> diffWaysToCompute(String input) {
         List<Integer> res = new ArrayList<Integer>();
-        if(input.length()==0)
-        return res;
-        
-        for(int i = 0; i<input.length()-1; i++){
-            if(input.charAt(i)=='+'
-            ||input.charAt(i)=='-'
-            ||input.charAt(i)=='*'){
-            List<Integer> resL = diffWaysToCompute(input.substring(0,i));
-            List<Integer> resR = diffWaysToCompute(input.substring(i+1));
-            for(int vall: resL)
-            for(int valr: resR){
-                if(input.charAt(i)=='+')
-                res.add(vall + valr);
-                else if(input.charAt(i)=='-')
-                res.add(vall - valr);
-                else if(input.charAt(i)=='*')
-                res.add(vall * valr);
+        if (input.length() == 0) return res;
+        for (int i = 0; i < input.length() - 1; i++){
+            if (input.charAt(i) == '+'||
+                input.charAt(i) == '-'||
+                input.charAt(i) == '*'){
+            List<Integer> resL = diffWaysToCompute(input.substring(0, i));
+            List<Integer> resR = diffWaysToCompute(input.substring(i + 1));
+            for (int vall : resL)
+            for (int valr : resR){
+                if (input.charAt(i) == '+') res.add(vall + valr);
+                else 
+                if (input.charAt(i) == '-') res.add(vall - valr);
+                else 
+                if (input.charAt(i) == '*') res.add(vall * valr);
             }
             }
         }
-        if(res.size()==0)
-        res.add(new Integer(input));
-        
+        if (res.size() == 0) res.add(new Integer(input));
         return res;
     }
 }
