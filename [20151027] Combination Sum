@@ -16,7 +16,7 @@ public class Solution {
             if (!res.contains(combination)) res.add(combination);
             return;
         }
-        for(int c : candidates){
+        for (int c : candidates){
             if (remain - c < 0) break;
             List<Integer> tmp = new ArrayList<Integer>(combination);
             tmp.add(c);
