@@ -39,6 +39,5 @@ public class Solution {
 
 /*
 这道题最开始思路比较明确，但是中间出现一个问题所以延长了完成时间，就是在下面对node.left和node.right进行递归的时候，并没有每次用一个
-新的newPath，而是直接把函数传入的currentPath放入了，这样就使得进行到node.right的时候currentPath这个list已经改变了。另外递归调用比较
-耗时，dis中有非递归的解法，要理解！
+新的newPath，而是直接把函数传入的currentPath放入了，这样就使得进行到node.right的时候currentPath这个list已经改变了。
 */
