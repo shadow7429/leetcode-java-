@@ -1,0 +1,44 @@
+// startTime: 21:13
+// finishTime: 22:02
+// https://leetcode.com/problems/path-sum-ii/
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+ 
+public class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        if (root == null) return res;
+        getSum(root, new ArrayList<Integer>(), res, 0, sum);
+        return res;
+    }
+    public void getSum(TreeNode node, List<Integer> currentPath, List<List<Integer>> res, int sum, int target){
+        if (node == null) return;
+        List<Integer> newPath = new ArrayList<Integer>(currentPath);
+        newPath.add(node.val);
+        if ((sum + node.val) == target && node.left == null && node.right == null){
+            res.add(newPath);
+            return;
+        }
+        sum = sum + node.val;
+        getSum(node.left, newPath, res, sum, target);
+        newPath = new ArrayList<Integer>(currentPath);
+        newPath.add(node.val);
+        getSum(node.right, newPath, res, sum, target);
+        
+        return;
+    }
+}
+
+/*
+这道题最开始思路比较明确，但是中间出现一个问题所以延长了完成时间，就是在下面对node.left和node.right进行递归的时候，并没有每次用一个
+新的newPath，而是直接把函数传入的currentPath放入了，这样就使得进行到node.right的时候currentPath这个list已经改变了。另外递归调用比较
+耗时，dis中有非递归的解法，要理解！
+*/
