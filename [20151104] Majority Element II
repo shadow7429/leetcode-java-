@@ -1,0 +1,26 @@
+// startTime: 23:30
+// finishTime: 23:56
+// https://leetcode.com/problems/majority-element-ii/
+
+public class Solution {
+    public List<Integer> majorityElement(int[] nums) {
+        int check = (int) Math.floor(nums.length/3);
+        List<Integer> res = new ArrayList<Integer>();
+        if (nums.length == 0) return res;
+        Arrays.sort(nums);
+        int count = 1;
+        for (int i = 0; i < nums.length - 1; i++){
+            if (nums[i + 1] != nums[i]){
+              if (count > check) res.add(nums[i]);
+              count = 1;
+            }
+            else count++;
+        }
+        if (count > check) res.add(nums[nums.length - 1]);
+        return res;
+    }
+}
+
+/*
+眼睛看来debug的能力太弱
+*/
