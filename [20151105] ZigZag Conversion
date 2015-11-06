@@ -1,0 +1,19 @@
+// startTime: 22:10
+// finishTime: 22:32
+// https://leetcode.com/problems/zigzag-conversion/
+
+public class Solution {
+    public String convert(String s, int numRows) {
+        if (s.length() <= numRows) return s;
+        String[] sArray = new String[numRows];
+        Arrays.fill(sArray, "");
+        int i = 0;
+        while (i < s.length()){
+            for (int j = 0; j < numRows && i < s.length(); j++) sArray[j] = sArray[j] + s.charAt(i++);
+            for (int j = numRows-2; j > 0 && i < s.length(); j--) sArray[j] = sArray[j] + s.charAt(i++);
+        }
+        StringBuilder res = new StringBuilder("");
+        for (String sb : sArray) res.append(sb);
+        return res.toString();
+    }
+}
