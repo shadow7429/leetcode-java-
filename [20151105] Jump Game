@@ -1,0 +1,16 @@
+// startTime: 20:36
+// finishTime: 21:03
+// https://leetcode.com/problems/jump-game/
+
+public class Solution {
+    public boolean canJump(int[] nums) {
+        if (nums.length == 0 || nums.length == 1) return true;
+        if (nums.length == 2 && nums[0] >= 1) return true;
+        if (nums.length == 2 && nums[0] < 1) return false;
+        int target = nums.length - 1;
+        for (int i = nums.length - 2; i >= 0; i--)
+            if (nums[i] >= (target - i)) target = i;
+        if (target == 0) return true;
+        else return false;
+    }
+}
