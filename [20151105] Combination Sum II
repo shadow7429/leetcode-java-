@@ -1,0 +1,35 @@
+// startTime: 21:08
+// finishTime: 21:38
+// https://leetcode.com/problems/combination-sum-ii/
+
+public class Solution {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        if (candidates.length == 0) return res;
+        Arrays.sort(candidates);
+        helper(candidates, 0, 0, res, new ArrayList<Integer>(), target);
+        return res;
+    }
+    public void helper(int[] candidates, int index, int currentSum, List<List<Integer>> res, List<Integer> path, int target){
+        if (currentSum == target){
+            if (!res.contains(path)) res.add(path);
+            return;
+        }
+        if (index > (candidates.length - 1)) return;
+        if ((candidates[index] + currentSum) > target) return;
+        List<Integer> tmpPath = new ArrayList<Integer>(path);
+        if ((candidates[index] + currentSum) == target){
+            tmpPath.add(candidates[index]);
+            if (!res.contains(tmpPath)) res.add(tmpPath);
+            return;
+        }
+        for (int i = index; i < candidates.length; i++){
+            tmpPath = new ArrayList<Integer>(path);
+            tmpPath.add(candidates[i]);
+            helper(candidates, i + 1, currentSum + candidates[i], res, tmpPath, target);
+        }
+    }
+}
+/*
+做过应用类似思路的题。
+*/
