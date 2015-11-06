@@ -1,0 +1,27 @@
+// startTime: 23:20
+// finishTime: 23:42
+// https://leetcode.com/problems/simplify-path/
+
+public class Solution {
+    public String simplifyPath(String path) {
+        if (path.length() == 0) return "";
+        StringBuilder sb = new StringBuilder("/");
+        LinkedList<String> l = new LinkedList<String>();
+        for (String s : path.split("/")){
+            if (s.equals("..")){
+                if (!l.isEmpty()) l.removeLast();
+            }
+            else 
+            if (!s.equals(".") && !s.equals("")) l.add(s);
+        }
+        for (String s : l) sb.append(s + "/");
+        if (!l.isEmpty()) sb.setLength(sb.length() - 1);
+
+        return sb.toString();
+    }
+}
+
+/*
+这道题因为对路径知识几乎0掌握，所以看了答案，但是对答案的if (!l.isEmpty()) sb.setLength(sb.length() - 1);这一句的作用不懂，
+在自己写的过程中，没有加这句，结果是错误的，已向答案提供者发出提问，等待解答中。
+*/
