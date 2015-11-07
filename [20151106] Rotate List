@@ -1,0 +1,31 @@
+// startTime: 22:57
+// finishTime: 23:25
+// https://leetcode.com/problems/rotate-list/
+
+public class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null) return head;
+        int len = getLen(head);
+        ListNode start = head;
+        while (head.next != null) head = head.next;
+        head.next = start;
+        int i = 0; 
+        while (i < (len - k%len)){
+            head = head.next;
+            start = start.next;
+            i++;
+        }
+        head.next = null;
+        return start;
+    }
+    
+    public int getLen(ListNode head){
+        int i = 0;
+        while (head != null){
+            i ++;
+            head = head.next;
+        }
+        return i;
+    }
+}
+//主要是对题意理解不对，最开始的判断如果k大于len就返回原来的list了。
