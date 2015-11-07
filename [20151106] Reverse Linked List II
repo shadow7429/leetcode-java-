@@ -1,0 +1,32 @@
+// startTime: 11:30
+// finishTime: 12:11
+// https://leetcode.com/problems/reverse-linked-list-ii/
+
+public class Solution {
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        if (head == null || m == n) return head;
+        Stack<ListNode> s = new Stack<ListNode>();
+        int i = 1;
+        ListNode concate = new ListNode(0);
+        concate.next = head;
+        ListNode resHead = concate;
+        while (head != null && i < m){
+            concate = head;
+            head = head.next;
+            i++;
+        }
+        if (head == null) return resHead;
+        while (i <= n && head != null){
+            ListNode tmp = new ListNode(head.val);
+            s.push(tmp);
+            head = head.next;
+            i++;
+        } 
+        while (!s.isEmpty()){
+            concate.next = s.pop();
+            concate = concate.next;
+        }
+        if (head != null) concate.next = head;
+        return resHead.next;
+    }
+}
