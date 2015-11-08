@@ -29,3 +29,7 @@ public class Solution {
         return l1;
     }
 }
+/*
+注意：对一个list进行遍历到最后r1已经到了末尾等于了null，这个时候我想在list的末端增加一个节点不能直接对r1 = new ListNode(...)。
+应该在走到最后一个节点没有到达null的时候进行增加节点的操作。r1.next = new ListNode(...)。
+*/
