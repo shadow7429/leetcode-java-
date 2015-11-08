@@ -1,0 +1,58 @@
+// startTime: 21:11
+// finishTime: 21:38
+// https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/
+
+// make use of LinkedList
+public class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null || head.next == null) return head;
+        LinkedList<ListNode> stack = new LinkedList<ListNode>();
+        int mark = head.val - 1;
+        ListNode p = new ListNode(mark);
+        while (head != null){
+            if (stack.size() == 0 && head.val != mark) stack.add(new ListNode(head.val));
+            else{
+                if(stack.size() != 0 && head.val == stack.getLast().val){
+                    mark = head.val;
+                    stack.removeLast();
+                }
+                else if(head.val == mark){}
+                else stack.add(new ListNode(head.val));
+            }
+            head = head.next;
+        }
+        int count = 0;
+        while (stack.size() > 0){
+            p.next = stack.removeFirst();
+            if(count == 0) head = p.next;
+            p = p.next;
+            count++; 
+        }
+        return head;
+    }
+}
+
+// 直接在list上进行操作的方法：
+public class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null || head.next == null) return head;
+        
+        ListNode FakeHead = new ListNode(0);
+        FakeHead.next = head;
+        ListNode pre = FakeHead;
+        ListNode cur = head;
+        while (cur != null){
+            while (cur.next != null && cur.val == cur.next.val) cur = cur.next;
+            if (pre.next == cur) pre = pre.next;
+            else pre.next = cur.next;
+            cur = cur.next;
+        }
+        return FakeHead.next;
+    }
+}
+/*
+因为最开始就可以是重复的序列，所以要用一个FakeHead。如果pre.next == cur的话就说明没有进入
+while (cur.next != null && cur.val == cur.next.val)，所以直接将pre和cur均向后移一位即可，
+如果pre.next != cur的话就说明中间出现了重复项，需要将他们全部删除，这时候pre不在重复序列中，
+cur是重复序列的最后一项，所以将pre.next = cur.next即可将重复部分全部删除。
+*/
