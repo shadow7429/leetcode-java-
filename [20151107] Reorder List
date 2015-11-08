@@ -1,0 +1,46 @@
+// duration: over a day.(too late yesterday)
+// https://leetcode.com/problems/reorder-list/
+
+public class Solution {
+    public void reorderList(ListNode head) {
+        if (head == null || head.next == null) return;
+        
+        //3 steps
+        //1. get the middle of the list using the fast/slow pointer
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast.next != null && fast.next.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        
+        //2. reverse the second half list
+        ListNode premiddle = slow;
+        ListNode precurrent = slow.next;
+        ListNode p = precurrent.next;
+        while (p != null){
+            precurrent.next = p.next;
+            p.next = premiddle.next;
+            premiddle.next = p;
+            p = precurrent.next;
+        }
+        
+        //3. construct the new list
+        precurrent = head;
+        p = premiddle.next;
+        while (precurrent != premiddle){
+            premiddle.next = p.next;
+            p.next = precurrent.next;
+            precurrent.next = p;
+            precurrent = p.next;
+            p = premiddle.next;
+        }
+        return;
+    }
+}
+/*
+在用fast/slow方法找中点的时候，对于偶数的情况，如果我想把slow最终定位在左半部分最后一个点的话，判断条件就是
+while (fast.next != null && fast.next.next != null)，如果我想把slow最终定位在有半部分的第一个点得话，判断条件
+为while (fast != null && fast.next != null). 这两个条件对奇数情况没有差别，均定位在中点。step2中的在原来的list
+上进行部分list的reverse方法要掌握，自己做总是出现nullpointer的error。
+*/
