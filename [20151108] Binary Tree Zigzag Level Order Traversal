@@ -1,0 +1,43 @@
+// startTime: 22:14
+// finishTime: 23:02
+// https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
+
+public class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        LinkedList<TreeNode> helper = new LinkedList<TreeNode>();
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        List<Integer> curLevel = new ArrayList<Integer>();
+        LinkedList<TreeNode> nextLevel = new LinkedList<TreeNode>();
+        if (root == null) return res;
+        helper.add(root);
+        TreeNode p = root;
+        boolean inorder = true;
+        
+        while (helper.size() > 0){
+            if (inorder) p = helper.removeFirst();
+            else p = helper.removeLast();
+            curLevel.add(p.val);
+            if (inorder){
+                if (p.left != null) nextLevel.add(p.left);
+                if (p.right != null) nextLevel.add(p.right);
+            }
+            else {
+                if (p.right != null) nextLevel.addFirst(p.right);
+                if (p.left != null) nextLevel.addFirst(p.left);
+            }
+            if (helper.size() == 0){
+                inorder = inorder == true? false : true;
+                res.add(curLevel);
+                curLevel = new ArrayList<Integer>();
+                helper.addAll(nextLevel);
+                nextLevel = new LinkedList<TreeNode>();
+            }
+            
+        }
+        return res;
+    }
+}
+
+/*
+其实这道题思路是很清晰的，就是按层遍历然后加一个inorder的判断。但是细节上总是出错，而且肉眼debug的能力太差，所以用了好一会儿。
+*/
