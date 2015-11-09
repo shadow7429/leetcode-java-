@@ -1,0 +1,57 @@
+// startTime: 23:02
+// finishTime: 24:28
+// https://leetcode.com/problems/basic-calculator/
+
+public class Solution {
+    public int calculate(String s) {
+        if (s.length() == 0) return 0;
+        int result = 0;
+        int sign = 1;
+        int number = 0;
+        Stack<Integer> stack = new Stack<Integer>();
+        for (int i = 0; i < s.length(); i ++){
+            char c = s.charAt(i);
+            if (Character.isDigit(c)){
+                number = number * 10 + c - '0';
+            }
+            else if (c == '+'){
+                result = result + sign * number;
+                sign = 1;
+                number = 0;
+            }
+            else if (c == '-'){
+                result = result + sign * number;
+                sign = -1;
+                number = 0;
+            }
+            else if (c == '('){
+                stack.push(result);
+                stack.push(sign);
+                result = 0;
+                sign = 1;
+            }
+            else if (c == ')'){
+                result = result + sign * number;
+                number = 0;
+                result = result * stack.pop();
+                result = result + stack.pop();
+            }
+        }
+        if (number != 0) result = result + sign * number;
+        return result;
+    }
+}
+
+/*
+遇到 ( 时候没有将number赋值为0的原因是，遇到左括号之前如果有其他字符，一定是 + 或者 -， 所以number已经为0；注意对Character.isDigit()
+的使用，各个类中的函数的直接使用可以方便很多，要注意积累。
+整个思路是：
+(1) 如果当前字符是数字的话，则number = number * 10 + c - '0';因为可能是多位数。
+(2) 如果当前字符是 + 的话，则将之前的result计算出来，即为result = result + sign * number;并且将sign赋值为1，注意这个时候对sign的赋值
+是用于下一次result的计算，因为这个加好是对下一个部分result的操作。
+(3) 同理遇到 - 号时也一样。
+(4) 遇到 (的时候，将括号之前的result压到stack中，同时将 ( 前面的符号压入stack。
+(5) 遇到 ）的时候，首先把括号内部的result计算完毕，然后result = result * stack.pop();代表着将这个result与 (之前的符号进行整合，然后
+将得到的完整的这一部分result与之前的result相加，即result = result + stack.pop();
+注意，在这道题里面，stack用来记录之前的result和遇到括号之前的符号。而result这个变量存储的是括号内部的结果。
+*/
