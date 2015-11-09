@@ -22,3 +22,7 @@ public class Solution {
         return s.isEmpty() ? 0 : s.pop();
     }
 }
+
+/*
+在上述代码中，在几个if之后的加减乘除操作不需要用Integer.valueOf()来进行操作，因为在放入stack的时候已经转成Integer型了。
+*/
