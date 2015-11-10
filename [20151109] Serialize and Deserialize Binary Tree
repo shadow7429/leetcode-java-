@@ -1,0 +1,45 @@
+// duration: over 1 hour because of a problem.
+
+public class Codec {
+    private static final String spliter = ",";
+    private static final String NN = "X";
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        buildString(root, sb);
+        System.out.println(sb.toString());
+        return sb.toString();
+    }
+
+    private void buildString(TreeNode node, StringBuilder sb) {
+        if (node == null) {
+            sb.append(NN).append(spliter);
+        } else {
+            sb.append(node.val).append(spliter);
+            buildString(node.left, sb);
+            buildString(node.right,sb);
+        }
+    }
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        Deque<String> nodes = new LinkedList<>();
+        nodes.addAll(Arrays.asList(data.split(spliter)));
+        return buildTree(nodes);
+    }
+
+    private TreeNode buildTree(Deque<String> nodes) {
+        String val = nodes.remove();
+        if (val.equals(NN)) return null;
+        else {
+            TreeNode node = new TreeNode(Integer.valueOf(val));
+            node.left = buildTree(nodes);
+            node.right = buildTree(nodes);
+            return node;
+        }
+    }
+}
+/*
+最开始想记录的时候是想如果是null的话就append上一个" "再加上用来分割字符的空格，所以如果前后输入的是1、null和2，那么得到的string
+就是"1   2 "，但是这个时候想用空格来进行split就无法得到想要的结果，所以之后研究了好久TAT，现在还不知道怎么解决，明天继续。
+*/
