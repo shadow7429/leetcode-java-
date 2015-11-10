@@ -1,0 +1,24 @@
+// startTime: 22:09
+// finishTime: 22:23
+// https://leetcode.com/problems/validate-binary-search-tree/
+
+public class Solution {
+    public boolean isValidBST(TreeNode root) {
+        if (root == null) return true;
+        if (root.left == null && root.right == null) return true;
+        List<Integer> occur = new ArrayList<Integer>();
+        return helper(root, Integer.MAX_VALUE, Integer.MIN_VALUE, occur);
+    }
+    public boolean helper(TreeNode node, int max, int min, List<Integer> occur){
+        if (node == null) return true;
+        if (occur.contains(node.val)) return false;
+        if (node.val < min || node.val > max) return false;
+        occur.add(node.val);
+        return helper(node.left, node.val, min, occur) && helper(node.right, max, node.val, occur);
+    }
+}
+
+/*
+做过类似题，这个最开始提交出现bug，因为这道题里输入可以有重复数据。面试的时候要与interviewer先确定下。这道题还可以中序遍历
+树，然后比较是否递增，且没有重复项。
+*/
