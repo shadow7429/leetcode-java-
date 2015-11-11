@@ -11,4 +11,18 @@ public class Solution {
         if (l != null && r != null) return root;
         return l == null? lowestCommonAncestor(r, p, q) : lowestCommonAncestor(l, p, q);
     }
+    
+    //CC189
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q){
+        if (root == null) return null;
+        if (root == p && root == q) return root;
+        TreeNode x = lowestCommonAncestor(root.left, p, q);
+        if (x != null && x != p && x != q) return x;
+        TreeNode y = lowestCommonAncestor(root.right, p, q);
+        if (y != null && y != p && y != q) return y;
+        if (x != null && y != null) return root;
+        else if (root == p || root == q) return root;
+        else return x == null ? y : x;
+        
+    }
 }
