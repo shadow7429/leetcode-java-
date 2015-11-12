@@ -1,0 +1,34 @@
+// not familiar with the bit problem so refer to the solutions.
+// https://leetcode.com/problems/repeated-dna-sequences/
+
+public class Solution {
+    public List<String> findRepeatedDnaSequences(String s) {
+        Set<Integer> words = new HashSet<>();
+        Set<Integer> doubleWords = new HashSet<>();
+        List<String> rv = new ArrayList<>();
+        char[] map = new char[26];
+        map['A' - 'A'] = 0;
+        map['C' - 'A'] = 1;
+        map['G' - 'A'] = 2;
+        map['T' - 'A'] = 3;
+        for (int i = 0; i < s.length() - 9; i++){
+            int v = 0;
+            for (int j = i; j < i + 10; j++){
+                v <<= 2;
+                v = v | map[s.charAt(j) - 'A'];
+            }
+            if (!words.add(v) && doubleWords.add(v)) rv.add(s.substring(i, i + 10));
+        }
+        return rv;
+    }
+}
+/*
+这道题最naive的方法就是遍历然后放在list里面，若是已经存在了则把字符串加入到res的list里面，最后返回res。但是这样操作会因为重复对
+字符串的操作而出现timelimited。
+这个解决方案是将字符串字符的操作化为bit的操作，v每一次对长度为10的字符串产生一个对应的由0123组成的位串，然后在句子：
+if (!words.add(v) && doubleWords.add(v)) rv.add(s.substring(i, i + 10));中，在判断words.add(v)的时候，若是words里面已经存在了
+v则返回false，不能加入，若不存在则加入返回true，因此这个判断语句的作用就是，如果words里面不存在v就将它加入到words里，若是
+已经存在，则判断是否在doublewords里，若不在则加入，并将其对应的字符串加入到rv中；若是doublewords中已经存在，则说明之前相同的
+字符串已经加入到rv中了，因此此时不能在加入到doublewords中，所以不进入if之后的操作中。
+注意这里map数组的使用方法，是经常用来将字符转换成数字的方法。
+*/
