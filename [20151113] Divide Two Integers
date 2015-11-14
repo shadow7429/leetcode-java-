@@ -29,7 +29,25 @@ public class Solution {
 } // Time Limited Exceeded. 用递归改进。
 
 // version 2.0
-
+public class Solution {
+    public int divide(int dividend, int divisor) {
+       long res = helper(dividend, divisor);
+       return res > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)res;
+    }
+    public long helper (long dividend, long divisor){
+        boolean sign = dividend < 0 != divisor < 0;
+        dividend = dividend >= 0 ? dividend : - dividend;
+        divisor = divisor > 0 ? divisor : - divisor;
+        if (dividend < divisor) return 0;
+        long sum = divisor;
+        long i = 1;
+        while ((sum + sum) <= dividend){
+            sum = sum + sum;
+            i = i + i;
+        }
+        return sign ? -(i + helper(dividend - sum, divisor)) : (i + helper(dividend - sum, divisor));
+    }
+}
 
 
 
