@@ -1,0 +1,21 @@
+// startTime: 15: 14
+// finishTime: 15:31
+// https://leetcode.com/problems/longest-increasing-subsequence/
+
+public class Solution {
+    //ask: 
+    //if there is duplication in the array, so what we should do in that situation.
+    public int lengthOfLIS(int[] nums) {
+        if (nums.length == 0) return 0;
+        if (nums.length == 1) return 1;
+        int[] less = new int[nums.length];
+        int res = 0;
+        Arrays.fill(less, 1);
+        for (int i = 1; i < nums.length; i++){
+            for (int j = 0; j < i; j++)
+                if (nums[i] > nums[j]) less[i] = Math.max(less[i], less[j] + 1);
+            res = Math.max(res, less[i]);
+        }
+        return res;
+    }
+}
