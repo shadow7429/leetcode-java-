@@ -1,0 +1,23 @@
+// startTime : 15: 47
+// finishTime: 16: 33
+// https://leetcode.com/problems/powx-n/
+
+public class Solution {
+    public double myPow(double x, int n) {
+        if (n == 0) return 1;
+        double tmp = myPow(x, n/2);
+        if (n % 2 == 0) return tmp * tmp;
+        else {
+            if (n >= 0)
+            return tmp * tmp * x;
+            else return (tmp * tmp) / x;
+        }
+    }
+}
+
+/*
+这道题采用的是二分的方法，递归调用。
+注意这里因为n / 2存在着若n是奇数，则多出一个数未被乘的情况，因此对这种情况要进行区分，若是n为正数则在 tmp * tmp 的基础上再乘
+一个x则可，若n < 0， 则相当于少乘一个 1/x ，因此需要在tmp * tmp 的基础上乘以 1 / x。 并且其实这样操作将x的符号问题也考虑进去
+了，因为若是n为偶数，则无需考虑x正负，结果都是正的，若n为奇数，则符号由附加乘的那个x决定。所以结果一致。
+*/
