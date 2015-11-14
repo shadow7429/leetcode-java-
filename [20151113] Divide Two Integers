@@ -1,0 +1,35 @@
+// startTime: 17: 04
+// finishTime: 17: 34
+// https://leetcode.com/problems/divide-two-integers/
+
+// version 1.0
+public class Solution {
+    public int divide(int dividend, int divisor) {
+        boolean sign = dividend / divisor >= 0 ? true : false;
+        dividend = dividend >= 0 ? dividend : - dividend;
+        divisor = divisor > 0 ? divisor : - divisor;
+        if (dividend < divisor) return 0;
+        int sum = divisor;
+        int res = 0;
+        int i = 1;
+        while (sum <= dividend){
+            if ((sum + sum) <= dividend){
+                sum = sum + sum;
+                i = i + i;
+            }
+            else {
+                dividend = dividend - sum;
+                sum = divisor;
+                res = res + i;
+                i = 1;
+            }
+        }
+        return sign == true ? res : - res;
+    }
+} // Time Limited Exceeded. 用递归改进。
+
+// version 2.0
+
+
+
+
