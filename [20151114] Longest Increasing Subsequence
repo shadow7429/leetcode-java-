@@ -5,6 +5,7 @@
 public class Solution {
     //ask: 
     //if there is duplication in the array, so what we should do in that situation.
+    // method 1: n^2
     public int lengthOfLIS(int[] nums) {
         if (nums.length == 0) return 0;
         if (nums.length == 1) return 1;
@@ -18,4 +19,29 @@ public class Solution {
         }
         return res;
     }
+    // method 2: n logn
+    public int lengthOfLIS(int[] nums) {            
+        int[] dp = new int[nums.length];
+        if (nums.length == 0) return 0;
+        if (nums.length == 1) return 1;
+        int len = 0;
+        for (int n : nums){
+            int i = Arrays.binarySearch(dp, 0, len, n);
+            if (i < 0)
+            i = - (i + 1);
+            dp[i] = n;
+            if (i == len) len++;
+        }
+        return len;
+    }
 }
+
+/*
+因为要求的改进是将时间复杂度减小到n logn， 因为不管如何要遍历一遍数组，需要n，因此可以知道在遍历的过程中，应该用binarySearch，
+但是要搜索的是什么，这一点比较难想。
+在改进方法中dp不是用来每一个数组中的数组存到它最长的子序列的长度，而是存储所有长度为i的子串的最后一个数字中的最小者，存这个的
+原因是因为如果后面要增加最长子序列的长度，只要再遇到的number大于这个最小值就可以。
+Arrays.binarySearch()函数的返回情况是：如果n存在在dp中，则返回其index，若不存在就返回- insertPoint -1, 因此如果i < 0, 我们要拿
+inserPoint就需要将i = - (i + 1)，然后将新的最小值存在dp中，如果i == len就说明len的长度增加了，所以需要将len++;最后len其实就是
+dp中最后有的值个数，也就是最长子串的长度。
+*/
