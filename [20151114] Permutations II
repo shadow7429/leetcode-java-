@@ -1,0 +1,27 @@
+// startTime: 00: 50
+// finishTime: 01: 11 Have done a similar one before.
+// https://leetcode.com/problems/permutations-ii/
+
+public class Solution {
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>>[] res = new List[nums.length + 1];
+        res[0] = new ArrayList<List<Integer>>();
+        res[0].add(new ArrayList<Integer>());
+        if (nums.length == 0) return res[0];
+        for (int i = 0; i < nums.length; i++){
+            res[i + 1] = new ArrayList<List<Integer>>();
+            int size = res[i].size();
+            for (int j = 0; j < size; j++){
+                List<Integer> tmp = res[i].get(j);
+                int insertP = tmp.size();
+                for (int k = 0; k <= insertP; k++){
+                    List<Integer> t = new ArrayList<Integer>(tmp);
+                    t.add(k, nums[i]);
+                    if (!res[i + 1].contains(t))
+                    res[i + 1].add(t);
+                }
+            }
+        }
+        return res[nums.length];
+    }
+}
