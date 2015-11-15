@@ -30,11 +30,17 @@ public int minimumTotal(List<List<Integer>> triangle) {
   
   // Right Answer : DP
   public int minimumTotal(List<List<Integer>> triangle) {
-    int[] A = new int[triangle.size()+1];
-    for (int i = triangle.size()-1;i>=0;i--){
-        for (int j=0;j<triangle.get(i).size();j++){
-            A[j] = Math.min(A[j],A[j+1])+triangle.get(i).get(j);
+    int[] A = new int[triangle.size() + 1];
+    for (int i = triangle.size() - 1; i >= 0; i--){
+        for (int j = 0; j < triangle.get(i).size(); j++){
+            A[j] = Math.min(A[j], A[j + 1]) + triangle.get(i).get(j);
         }
     }
     return A[0];
   }
+  /*
+  注意：错误的思路是对每两个点进行判断，然后确定要走哪条路径，这是局部最优解，但不一定是全局最优解。而全局最优解应该是对每一个点
+  进行判断，看到达它的最短路径是多少然后往上面推。对第一个错误的答案，因为不能更改list的信息，所以如果选用一个数组来存储上到达
+  各层各点的最短路径也可，但是这样需要很大的array，所以正确答案中对array的情况进行了改进，我们初始化的array是最后一层数据量那么大，
+  对于上面的各层就相当于将数据全部存在前面，数组后面不管，这样到最后信息就存在A[0]中，即可直接获得所求结果。
+  */
