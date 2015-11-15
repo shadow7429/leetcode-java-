@@ -1,0 +1,68 @@
+// startTime: 17: 55
+// finishTime: 18: 16 
+// https://leetcode.com/discuss/56323/very-simple-clean-java-solution
+
+
+// Solution 1:
+public class Solution {
+    public String longestPalindrome(String s) {
+        if (s.length() == 1) return s;
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        String res = "";
+        int len = 0;
+        for (int i = 0; i < s.length(); i++){
+            for (int j = 0; j <= i; j++){
+                if (i == j || helper(s.substring(j, i + 1)) == true){
+                    dp[j][i] = true;
+                    if (i - j + 1 > len){
+                        len = i - j + 1;
+                        res = s.substring(j, i + 1);
+                    }
+                }
+            }
+        }
+        return res;
+        
+    }
+    public boolean helper(String s){
+        int begin = 0;
+        int end = s.length() - 1;
+        while (begin < end){
+            if (s.charAt(begin) != s.charAt(end))
+            return false;
+            else{
+                begin ++;
+                end --;
+            }
+        }
+        return true;
+    }
+}
+
+// Solution 2: 
+public class Solution {
+    int lo = 0;
+    int maxLen = 0;
+    public String longestPalindrome(String s) {
+        if (s.length() <= 1) return s;
+        for (int i = 0; i< s.length() - 1; i++){
+            helper(s, i, i);
+            helper(s, i, i + 1);
+        }
+        return s.substring(lo, lo + maxLen);
+    }
+    public void helper(String s, int i, int j){
+        while (i >= 0 && j < s.length() && s.charAt(i) == s.charAt(j)){
+            i--;
+            j++;
+        }
+        if (j - i - 1 > maxLen){
+            lo = i + 1;
+            maxLen = j - i - 1;
+        }
+    }
+}
+/*
+在第二个方法里面，它是对每一个字符进行左右的扩展，直到不能扩展，这样就避免了方法一中的很多不必要的判断，省了很多时间。有个地方要
+注意，在helper中，在while循环中，最后跳出的条件是i多减了1，j多加了1，所以后面求lo和maxLen要对表达式进行调整，否则会出现溢出。
+*/
