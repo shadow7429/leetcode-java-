@@ -1,0 +1,39 @@
+// startTime: 00: 02
+// finishTime: 22: 41 Used to do a similar one.
+// https://leetcode.com/problems/palindrome-partitioning/
+
+public class Solution {
+    public List<List<String>> partition(String s) {
+        int len = s.length();
+        List<List<String>>[] res = new List[len + 1];
+        boolean[][] pal = new boolean[len][len];
+        res[0] = new ArrayList<List<String>>();
+        res[0].add(new ArrayList<String>());
+        for (int i = 0; i < len; i++){
+            res[i + 1] = new ArrayList<List<String>>();
+            for (int j = 0; j <= i; j++){
+                if (i == j || (((j + 1 == i) || pal[j + 1][i - 1] == true) && s.charAt(i) == s.charAt(j))){
+                    pal[j][i] = true;
+                    String tmp = s.substring(j, i + 1);
+                    List<List<String>> JL = res[j];
+                    for (List<String> l : JL){
+                        List<String> itmp = new ArrayList<String>();
+                        itmp.addAll(l);
+                        itmp.add(tmp);
+                        res[i + 1].add(itmp);
+                    }
+                }
+                
+            }
+        }
+        return res[len];
+    }
+}
+
+/*
+在求有关回文序列的时候，如果只是找其中的某个序列的话，就遍历一遍以每一个为中心看回文序列，然后找出最长的就可以了。
+但是如果要求的是所有的回文序列，就要用到动态规划的问题，因为如果用两个循环进行一个从0到len-1，一个从0到i这样进行判断
+j ~ i段是不是回文序列，这样会多做很多重复的工作，很多序列会在每一次都循环时都进行判断一次，因此我们就将从j到i的子串
+的回文情况存储到数组中，之后判断新的中间包括这一段的序列的子序列是不是回文的时候只需要判断两端相同，中间是回文即可。
+而且通常求所有回文序列的方法都是对list的添加，最开始list是空，之后随着每个字符的增加list的size越来越大。
+*/
