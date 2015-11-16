@@ -1,0 +1,75 @@
+// startTime: 10: 15
+// finishTime: 10: 41
+// https://leetcode.com/problems/permutation-sequence/
+
+// brute one:
+public class Solution {
+    public String getPermutation(int n, int k) {
+        int index = -1;
+        for (int i = 1; i <= n; i++){
+            if (Math.pow(i, i) >= k) index = i; 
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= n - index; i++) sb.append(i);
+        int[] change = new int[index];
+        for (int i = n - index + 1; i <= n; i++){
+            change[i - n + index - 1] = i;
+        }
+        for (int i = 1; i < k; i++) change = nextPermutation(change);
+        for (int i = 0; i < change.length; i++) sb.append(change[i]);
+        return sb.toString();
+    }
+    
+    public int[] nextPermutation(int[] nums) {
+        if (nums.length <= 1) return nums;
+        int index1 = -1;
+        for (int i = 0; i < nums.length - 1; i++){
+            if (nums[i + 1] > nums[i]) index1 = i;
+        }
+        
+        int index2 = -1;
+        for (int i = index1 + 1; i < nums.length && index1 >= 0; i++){
+            if (nums[i] > nums[index1]) index2 = i;
+        }
+        
+        int tmp;
+        if (index1 >= 0)
+        {
+            tmp = nums[index1];
+            nums[index1] = nums[index2];
+            nums[index2] = tmp;
+        }
+        
+        for (int i = index1 + 1; i < nums.length - 1; i++){
+            for (int j = i + 1; j < nums.length; j++){
+                if (nums[i] > nums[j]){
+                    tmp = nums[i];
+                    nums[i] = nums[j];
+                    nums[j] = tmp;
+                }
+            }
+        }
+        return nums;
+    }
+}
+/*
+这个方法是结合了next—Permutation来求，其中做了一点改进是先判断是从哪一位开始变化可以得到第k个。这样的做法使得前面的序列可以保持
+不变只对后面的部分求next-Permutaion。时间复杂度在O(n ^ 2 * k)上。不满足时间要求。
+*/
+// Answer in the discuss.
+public String getPermutation(int n, int k) {
+        List<Integer> num = new LinkedList<Integer>();
+        for (int i = 1; i <= n; i++) num.add(i);
+        int[] fact = new int[n];  // factorial
+        fact[0] = 1;
+        for (int i = 1; i < n; i++) fact[i] = i*fact[i-1];
+        k = k-1;
+        StringBuilder sb = new StringBuilder();
+        for (int i = n; i > 0; i--){
+            int ind = k/fact[i-1];
+            k = k%fact[i-1];
+            sb.append(num.get(ind));
+            num.remove(ind);
+        }
+        return sb.toString();
+  }
