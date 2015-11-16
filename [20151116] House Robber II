@@ -1,0 +1,35 @@
+// https://leetcode.com/problems/house-robber-ii/
+
+public class Solution {
+    public int rob(int[] nums) {
+        if (nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        if (nums.length == 2) return Math.max(nums[0], nums[1]);
+        if (nums.length == 3) return Math.max(Math.max(nums[0], nums[1]), nums[2]);
+        int[] dp1 = new int[nums.length];
+        int[] dp2 = new int[nums.length];
+        dp1[0] = 0;
+        dp1[1] = nums[0];
+        dp2[0] = 0;
+        dp2[1] = nums[1];
+        int res = Math.max(dp1[1], dp2[1]);
+        
+        for (int i = 1; i < nums.length - 1 ; i++){
+            dp1[i + 1] = dp1[i] > dp1[i - 1] + nums[i]? dp1[i] : dp1[i - 1] + nums[i]; 
+            res = Math.max(res, dp1[i + 1]);
+        }
+        for(int j = 2; j < nums.length; j ++){
+            dp2[j] = dp2[j - 1] > dp2[j - 2] + nums[j]? dp2[j - 1] : dp2[j - 2] + nums[j];
+            res = Math.max(res, dp2[j]);
+        }
+        return res;
+    }
+}
+
+/*
+这道题的思路就是一系列的数字x1,x2,x3,x4,x5...xn，既然对于xn来说不能跟x0同时存在，那么我就分成两种请款，一种里面可能有x0，一种
+里面可能有xn，所以两个数组为x0,x1,x2,x3...xn-1 | x1,x2,x3,x4...xn，这样按照以前的house robber的题求就可以了。
+最开始思路是按照一个数组来，到最后一项的时候，xn-2 + xn想要进行判断看xn-2里面有没有加入了x0，如果当初有加入则在这个时候减去x0,
+但这个方法是错误的，因为如果当初在进行dp[n-2]选择的时候因为是从dp[n-3]和dp[n-4] + nums[n-2]中选比较大的，但是如果是要先减去x0,
+则在dp[n-2]的地方值可能就不一样了，所以不能这样进行计算。
+*/
