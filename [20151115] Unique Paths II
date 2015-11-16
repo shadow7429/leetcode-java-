@@ -1,0 +1,32 @@
+// https://leetcode.com/problems/unique-paths-ii/
+
+public class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int width = obstacleGrid[0].length;
+        int [] dp = new int[width];
+        dp[0] = 1;
+        for (int[] row : obstacleGrid){
+            for (int j = 0; j < width; j++){
+                if (row[j] == 1) dp[j] = 0;
+                else if (j > 0) dp[j] = dp[j] + dp[j - 1];
+            }
+        }
+        return dp[width - 1];
+    }
+}
+//这道题自己只写出了暴力法，但是不能通过测试，出现timelimited，因此算没做出来。
+/*
+这个好的方法的思路是：
+[
+  [0,0,0],
+  [0,1,0],
+  [0,0,0]
+]
+对于第一列的格子，都只能有一种到达该格子的方法，因为只能是从上到下走到它，而对于中间的格子，到达它的方法有两类，一类是从它
+上一行对应的格子下来，和从它左边邻居的格子过来，因此我们采用一个数组dp[],用它来记录一行的情况，但注意这里dp是一维的，因为对于
+第二行的第i格格子，求到达它的方法数，只需要将dp[i] = dp[i] + dp[i - 1]即可，等式右边的dp[i]是上一行第i个格子，dp [i - 1]是这一行
+第i - 1个格子。这里注意如果当前格子中是1，则需要将dp[i] = 0这样下一层的对应格子就不存在由这个格子到他产生的路径了。如果j == 0的
+时候，dp的值不变，因为第一列的各个格子的到达路径方法始终只能是1.
+！！！注意：对于DP问题，要先拿出暴力解决方法，然后分析其中重复进行了哪些工作，然后运用合适的数据结构将某些状态存储起来，以避免
+进行重复的工作。
+*/
