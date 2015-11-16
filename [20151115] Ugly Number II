@@ -1,0 +1,45 @@
+// startTime: 00: 14
+// finishTime: 00: 48
+// https://leetcode.com/problems/ugly-number-ii/
+// solution 1:
+public class Solution {
+    public int nthUglyNumber(int n) {
+        if (n == 1) return 1;
+        LinkedList<Long> l = new LinkedList<Long>();
+        l.add((long)1);
+        int i = 1;
+        while (i < n){
+            //if (l.size() > n - i - 1 && l.get(n - i - 1) <= p * 2)
+            Long p = l.removeFirst();
+            if (!l.contains(p * 2)) l.add(p * 2);
+            if (!l.contains(p * 3)) l.add(p * 3);
+            if (!l.contains(p * 5)) l.add(p * 5);
+            Collections.sort(l);
+            i++;
+        }
+        long res = l.removeFirst();
+        return (int)res;
+    }
+} 
+// solution 2:
+public class Solution {
+    public int nthUglyNumber(int n) {
+        int[] ugly = new int[n];
+        ugly[0] = 1;
+        int index2 = 0, index3 = 0, index5 = 0;
+        int factor2 = 2, factor3 = 3, factor5 = 5;
+        for (int i = 1; i < n; i ++){
+            int min = Math.min(Math.min(factor2, factor3), factor5);
+            ugly[i] = min;
+            if (factor2 == min) factor2 = 2 * ugly[++index2];
+            if (factor3 == min) factor3 = 3 * ugly[++index3];
+            if (factor5 == min) factor5 = 5 * ugly[++index5];
+        }
+        return ugly[n - 1];
+    }
+}
+
+/*
+后面这个方法将时间复杂度控制在了O(n),非常好。
+方法的思路https://leetcode.com/discuss/52716/o-n-java-solution
+*/
