@@ -1,0 +1,33 @@
+// 看了答案
+
+public class Solution {
+    public String fractionToDecimal(int numerator, int denominator) {
+        if (numerator == 0) return "0";
+        String sign = (numerator < 0 == denominator < 0) ? "":"-";
+        //可能是负数，但是求绝对值会超过Integer的范围
+        long n = Math.abs((long)numerator);
+        long d = Math.abs((long)denominator);
+        
+        StringBuilder sb = new StringBuilder();
+        // 第一步加入符号
+        sb.append(sign);
+        // 加入整数部分
+        sb.append(n / d);
+        long remainder = n % d;
+        if (remainder == 0) return sb.toString();
+        //之后的操作只是反复用remainder了
+        sb.append(".");
+        HashMap<Long, Integer> rl = new HashMap<Long, Integer>();
+        while(!rl.containsKey(remainder) && remainder != 0){
+            rl.put(remainder, sb.length());
+            sb.append(remainder * 10 / d);
+            remainder = remainder * 10 % d;
+        }
+        if (remainder != 0){
+            int index = rl.get(remainder);
+            sb.insert(index, "(");
+            sb.append(")");
+        }
+        return sb.toString();
+    }
+}
