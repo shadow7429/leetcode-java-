@@ -1,5 +1,5 @@
 // startTime: 10:50
-// finishTime1: 11:05
+// finishTime: 11:05
 https://leetcode.com/problems/contains-duplicate-iii/
 // Time consuming...
 public class Solution {
