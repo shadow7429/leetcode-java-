@@ -1,0 +1,32 @@
+// duration: less than 10 min since only a few changes needed.
+
+public class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        int[] course = new int[numCourses];
+        int [][] pair = new int[numCourses][numCourses]; //pre c
+        int[] indegree = new int[numCourses];
+        
+        for (int[] i : prerequisites){
+            if (pair[i[1]][i[0]] == 0) indegree[i[0]] ++;
+            pair[i[1]][i[0]] = 1;
+        } 
+        LinkedList<Integer> finished = new LinkedList<Integer>();
+        for (int i = 0; i < numCourses; i++){
+            if(indegree[i] == 0) finished.add(i);
+        }
+        int count = 0;
+        while (finished.size() > 0){
+            int c = finished.removeFirst();
+            course[count] = c;
+            count ++;
+            for (int i = 0; i < numCourses; i++){
+                if (pair[c][i] != 0){
+                    indegree[i]--;
+                    if (indegree[i] == 0) finished.add(0,i); // 除了加入数组之外唯一改动的地方
+                }
+            }
+        }
+        if (count == numCourses) return course;
+        else return new int[0]; // [] 的表示方法
+    }
+}
