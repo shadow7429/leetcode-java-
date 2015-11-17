@@ -1,0 +1,68 @@
+// startTime: 12: 02
+// finishTime: 12: 24
+// https://leetcode.com/problems/course-schedule/
+
+// 这个时间是拿出brute solution的时间，并没有通过时间复杂度的要求。
+public class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        if (prerequisites.length == 0) return true;
+        
+        List<Integer> visited = new ArrayList<Integer>();
+        List<Integer> pre = new ArrayList<Integer>();
+        for (int[] i : prerequisites){
+            pre.add(i[0]);
+        }
+        for (int i  = 0 ; i < prerequisites.length; i++){
+            visited = new ArrayList<Integer>();
+            int[] pair = prerequisites[i];
+            if (!pre.contains(pair[1])) continue;
+            int tmp = pair[1];
+            visited.add(pair[0]);
+            while (pre.contains(tmp) && visited.size() <= numCourses){
+                if (visited.contains(tmp)) return false;
+                int[] t = prerequisites[pre.indexOf(tmp)];
+                visited.add(tmp);
+                tmp = t[1];
+            }
+        }
+        return true;
+    }
+}
+// 这个方法就是单纯的对每一个前置条件进行判断，可想而知多做了很多工作。
+// discuss one:
+public class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        int [][] pair = new int[numCourses][numCourses]; //pre c
+        int[] indegree = new int[numCourses];
+        
+        for (int[] i : prerequisites){
+            if (pair[i[1]][i[0]] == 0) indegree[i[0]] ++;
+            pair[i[1]][i[0]] = 1;
+        } 
+        LinkedList<Integer> finished = new LinkedList<Integer>();
+        for (int i = 0; i < numCourses; i++){
+            if(indegree[i] == 0) finished.add(i);
+        }
+        int count = 0;
+        while (finished.size() > 0){
+            int c = finished.removeFirst();
+            count ++;
+            for (int i = 0; i < numCourses; i++){
+                if (pair[c][i] != 0){
+                    indegree[i]--;
+                    if (indegree[i] == 0) finished.add(i);
+                }
+            }
+        }
+        if (count == numCourses) return true;
+        else return false;
+    }
+}
+/*
+后面这个方法的思路就是图的操作。首先women记录下每一对有关联的课程，并且对每一个有前置课程的课程进行入度的累加，这里要注意
+如果一个课程有两个前置课程必须这两个课程都能完成这个课程才可以完成。
+随后我们将每一个不需要前置可能的课加入到一个LinkedList中，然后从这个list中持续pop出来一个课程，并且对以这个课程为前置课程的课
+的入度都减一，这个操作就就是说明这些课程的限制少了一个，因为这个课程是可直接完成的。之后对每一个入度减少了的课程进行判断，看
+是否变为入度为0，若是入度为0，则加入到list中，最后知道list的size为空，说明没有可完成的课程了，这个时候比较从list中pop出来的课程
+数目，若是为numCourses则说明所有的课程都可完成，若不相等，则返回false；
+*/
