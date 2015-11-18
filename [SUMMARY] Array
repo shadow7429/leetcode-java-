@@ -1,0 +1,6 @@
+1. Key knowledge points in CC189
+HashTable:
+对于HashTable来说，CC上介绍了两种实现方法，一种是用array of linkedlist，因为存在几个object的key相同的情况，因此知道一个key找寻
+object的最坏时间复杂度是O(n)；另一种是用bst来实现，时间复杂度是O(logn).
+
+2. leetcode 类型题
