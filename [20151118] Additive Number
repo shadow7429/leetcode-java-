@@ -1,0 +1,45 @@
+// startTime: 11: 23
+// finishTime: 12:42
+// https://leetcode.com/problems/additive-number/
+
+// brute one: 
+public class Solution {
+    public boolean isAdditiveNumber(String num) {
+        if (num.length() < 3) return false;
+        long len = num.length();
+        for (int i = 1; i <= len - 2; i++){
+            long number1 = Long.valueOf(num.substring(0, i));
+            for (int j = i + 1; j <= len - 1; j++){
+                if (num.charAt(i) == '0' && j > i + 1) break;
+                long number2 = Long.valueOf(num.substring(i, j));
+                long number3 = number1 + number2;
+                for (int k = j + 1; k <= len; k++){
+                    if (num.charAt(j) == '0' && k > i + 1) break;
+                    if (Long.toString(number3).length() < (k - j)) break;
+                    if (Long.valueOf(num.substring(j, k)) == number3){
+                        if (helper(num, number2, number3, k) == true) return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    public boolean helper(String num, long number1, long number2, int start){
+        long number3 = number1 + number2;
+        String s = Long.toString(number3);
+        if (start == num.length()) return true;
+        if (num.substring(start, num.length()).length() < s.length()) return false;
+        if (!num.substring(start, s.length() + start).equals(s)) return false;
+        start = s.length() + start;
+        return helper(num, number2, number3, start);
+    }
+}
+/*
+需要注意的问题有几点：
+1. 对于涉及到整数加减乘除并且可能很大的情况下，最好采用long而不是int。
+2. 题目中特别指出数字不能以0开始，但是注意不能简单的==0就过，因为02是不合法的但是0本身是合法的，因此如果数字是单位的，则可以为0。
+这道题的基本思路就是，先确定下前三个数，然后再递归调用helper函数，下一个数合不合法，如果合法就一直递归到string的末尾，若不合法就
+返回。
+这道题这种做法重复做了很多工作，因此可以另建一个class，里面包含了int number1， int number2，以及startLoc, 以及boolean值，意为进入
+helper的参数列表，如果当前的情况之前已经计算过了，则直接返回是否valid，如果没有计算过就进行计算。
+*/
