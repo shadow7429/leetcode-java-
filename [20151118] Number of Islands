@@ -1,0 +1,37 @@
+// startTime: 10: 50
+// finishTime: 11: 11
+// https://leetcode.com/problems/number-of-islands/
+
+public class Solution {
+    public int numIslands(char[][] grid) {
+        if (grid.length == 0) return 0;
+        boolean[][] visited = new boolean[grid.length][grid[0].length];
+        int count = 0;
+        for (int i = 0; i < grid.length; i++){
+            for (int j = 0; j < grid[0].length; j++){
+                if (visited[i][j] != true && grid[i][j] == '1'){
+                    helper(grid, i, j, visited);
+                    count ++;
+                }
+            }
+        }
+        return count;
+    }
+    public void helper(char[][] grid, int x, int y, boolean[][] visited){
+        if (x < 0 || x >= grid.length || y < 0 || y >= grid[0].length) return;
+        if (grid[x][y] == '0') return;
+        if (visited[x][y] == true) return;
+        visited[x][y] = true;
+        helper(grid, x - 1, y, visited);
+        helper(grid, x + 1, y, visited);
+        helper(grid, x, y - 1, visited);
+        helper(grid, x, y + 1, visited);
+        return;
+    }
+}
+/*
+我的方法就是从头到尾遍历，如果一个格子中的点是1，则说明它属于某个岛，那么我就以它为中心向外扩展，这样递归的以每个格子为中心
+向四周扩散，并且用visited来记录一个已经属于别的岛了的并且为1的格子，所以这样子对整个二维数组进行遍历，如果再遇到一个格子是1，
+并且visited为false那么就说明它属于一个新的岛，这样子最后就得到总共有多少个不同的岛。这个方法helper处相当于一个dfs，每一个点
+的儿子是它上下左右四个格子。
+*/
