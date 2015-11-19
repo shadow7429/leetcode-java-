@@ -1,0 +1,31 @@
+// https://leetcode.com/problems/number-of-digit-one/
+
+// brute one:
+public class Solution {
+    public int countDigitOne(int n) {
+        int count = 0;
+        for (int i = 1; i <= n; i++){
+            int number = i;
+            while (number > 0){
+                count = count + number % 10 == 1 ? 1 : 0;
+                number = number / 10;
+            }
+        }
+        return count;
+    }
+}
+/*
+一道medium的题显然这样是不符合时间复杂度的，但是面试的时候要能马上给出一个0 bug的答案，然后再进行改进。
+*/
+
+// discuss 答案：
+public int countDigitOne(int n) {
+  int count = 0;
+  for (long k = 1; k <= n; k *= 10) {
+    long r = n / k, m = n % k;
+    // sum up the count of ones on every place k
+    count += (r + 8) / 10 * k + (r % 10 == 1 ? m + 1 : 0);
+  }
+  return count;
+}
+// 这是什么鬼！！！
