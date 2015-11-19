@@ -1,0 +1,37 @@
+// startTime: 21: 36
+// finishTime: 22: 01
+// https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+
+public class Solution {
+    public List<String> letterCombinations(String digits) {
+        String[] digit_s = new String[10];
+        digit_s[0] = "";
+        digit_s[1] = "";
+        digit_s[2] = "abc";
+        digit_s[3] = "def";
+        digit_s[4] = "ghi";
+        digit_s[5] = "jkl";
+        digit_s[6] = "mno";
+        digit_s[7] = "pqrs";
+        digit_s[8] = "tuv";
+        digit_s[9] = "wxyz";
+        List<String> res = new ArrayList<String>();
+        if (digits.length() == 0) return res;
+        helper(digits, 0, "", res, digit_s);
+        return res;
+    }
+    public void helper(String digits, int index, String current, List<String> res, String[] digit_s){
+        if (index == digits.length()){
+            res.add(current);
+            return;
+        }
+        int array_index = digits.charAt(index) - '0';
+        for (int i = 0; i < digit_s[array_index].length(); i++){
+            helper(digits, index + 1, current + digit_s[array_index].charAt(i), res, digit_s);
+        }
+        return;
+    }
+}
+/*
+正常思路，一般这种要求全部组合形式的就是递归调用加list。
+*/
