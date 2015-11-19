@@ -1,0 +1,34 @@
+// startTime: 14: 05
+// finishTime: 14: 37
+// https://leetcode.com/problems/maximal-square/
+
+public class Solution {
+    public int maximalSquare(char[][] matrix) {
+        if (matrix.length == 0) return 0;
+        int [][] depth = new int[matrix.length][matrix[0].length];
+        int max = 0;
+        for (int i = 0; i < matrix.length; i++){
+            for (int j = 0; j < matrix[i].length; j++){
+                if (matrix[i][j] == '0') continue;
+                int current = helper(matrix, i, j, depth);
+                if (current > max) max = current;
+            }
+        }
+        max = (int) Math.pow(max, 2);
+        return max;
+    }
+    public int helper(char[][] matrix, int i, int j, int[][] depth){
+        if (i >= matrix.length || j >= matrix[i].length) return 0;
+        if (matrix[i][j] == '0') return 0;
+        if (i == matrix.length - 1 || j == matrix[i][j] - 1) return 1;
+        if (depth[i][j] > 0) return depth[i][j];
+        int d1 = helper(matrix, i + 1, j, depth);
+        int d2 = helper(matrix, i, j + 1, depth);
+        int d3 = helper(matrix, i + 1, j + 1, depth);
+        depth[i][j] = Math.min(Math.min(d1, d2), d3) + 1;
+        return depth[i][j];
+    }
+}
+/*
+这道题的思路跟之前做的求island得那道题差不多，这里面加入了一个数组，为了省去重复工作。
+*/
