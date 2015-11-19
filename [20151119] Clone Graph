@@ -1,0 +1,35 @@
+// https://leetcode.com/problems/clone-graph/
+
+/**
+ * Definition for undirected graph.
+ * class UndirectedGraphNode {
+ *     int label;
+ *     List<UndirectedGraphNode> neighbors;
+ *     UndirectedGraphNode(int x) { label = x; neighbors = new ArrayList<UndirectedGraphNode>(); }
+ * };
+ */
+public class Solution {
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode root) {
+        if (root == null) return null;
+        Queue<UndirectedGraphNode> queue = new LinkedList<UndirectedGraphNode>();
+        queue.add(root);
+        
+        Map<UndirectedGraphNode, UndirectedGraphNode> map = new HashMap<UndirectedGraphNode, UndirectedGraphNode>();
+        map.put(root, new UndirectedGraphNode(root.label));
+        while(! queue.isEmpty()){
+            UndirectedGraphNode node = queue.poll();
+            for (UndirectedGraphNode neighbor : node.neighbors){
+                if (! map.containsKey(neighbor)){
+                    map.put(neighbor, new UndirectedGraphNode(neighbor.label));
+                    queue.add(neighbor);
+                }
+                map.get(node).neighbors.add(map.get(neighbor));
+            }
+        }
+        return map.get(root);
+    }
+}
+/*
+这道题要注意的点是，必须对每一个node进行clone，也就是说不能只克隆了根节点，然后将根节点的neighbors直接赋给新的节点。所以
+这里很聪明得用了hashmap，将每个根节点与新克隆的节点相对应。
+*/
