@@ -2,6 +2,36 @@
 // finishTime: 22: 47 有time limit exceed 所以并没完成。
 // https://leetcode.com/problems/gas-station/
 
+
+// discuss 
+public class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int S = gas[0] - cost[0];
+        int sum = 0;
+        int start = 0;
+        for (int i = 0; i < gas.length; i++){
+            int tmp = gas[i] - cost[i];
+            sum = sum + tmp;
+            if (S < 0) {
+                S = tmp;
+                start = i;
+            }
+            else S = S + tmp;
+        }
+        if (sum < 0) return -1;
+        else return start;
+    }
+}
+
+/*
+这个解法用的一个大前提结论是，如果整个环的gas[] - cost[]之和大于0，那么肯定存在解。
+两个地方需要解释：
+(1) 当S < 0的时候start只需要从当前的i位置重新开始就可以了，不需要回到start + 1，因为start位置处的S肯定是大于0的，那么
+不管start + 1处的 gas[] - cost[]是大于0还是小于0， 一直到i处的总和肯定是小于从start处开始的总和的，因为要减去一个正数嘛。
+(2) 只需要遍历一遍的原因是因为，如果从start处开始是合法的，并且总和是大于0的，就说明从start开始一直到末尾的积累和是足以
+cover从开始到start处的需要gas的量的。
+*/
+
 // brute one: public class Solution {
     public int canCompleteCircuit(int[] gas, int[] cost) {
         for (int i = 0; i < gas.length; i++)
@@ -61,26 +91,3 @@ public class Solution {
 其实就是简单的从每个地方开始，全部累加起来看绕一圈有没有不合法的情况出现，若是没有，最后sum >= 0了，就说明该位置可行。
 */
 
-// discuss 
-public class Solution {
-    public int canCompleteCircuit(int[] gas, int[] cost) {
-        int S = gas[0] - cost[0];
-        int sum = 0;
-        int start = 0;
-        for (int i = 0; i < gas.length; i++){
-            int tmp = gas[i] - cost[i];
-            sum = sum + tmp;
-            if (S < 0) {
-                S = tmp;
-                start = i;
-            }
-            else S = S + tmp;
-        }
-        if (sum < 0) return -1;
-        else return start;
-    }
-}
-
-/*
-Discuss上说是求gas[] - cost[]的最大子序列和问题，可是不明白为什么可以这样做。
-*/
