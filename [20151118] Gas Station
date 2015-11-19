@@ -1,0 +1,86 @@
+// startTime: 22: 08
+// finishTime: 22: 47 有time limit exceed 所以并没完成。
+// https://leetcode.com/problems/gas-station/
+
+// brute one: public class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        for (int i = 0; i < gas.length; i++)
+        {
+            int tmp = gas[i];
+            gas[i] = 0;
+            if (helper(gas, cost, i, 1, tmp - cost[i]) == true) return i;
+            gas[i] = tmp;
+        }
+        return -1;
+    }
+    public boolean helper(int[] gas, int[] cost, int index, int count, int amount){
+        if (amount < 0) return false;
+        if (amount >= 0 && count == gas.length) return true;
+        boolean res1 = false;
+        index = (index + 1) % gas.length;
+        int tmp = gas[index];
+        if (gas[index] > 0){
+            gas[index] = 0;
+            res1 = helper(gas, cost, index, count + 1, amount + tmp - cost[index]);
+            gas[index] = tmp;
+        }
+        boolean res2 = helper(gas, cost, index, count + 1, amount - cost[index]);
+        return res1 || res2;
+    }
+}
+/*
+非常不能理解为什么会第一反应这样做：(比较适合求出所有的方法)
+我的想法就是对于一个gas station来说可以加也可以不加，所以递归到每一个加油站有两个分支，如果有一个分支是true的就可以返回。
+并且在这个station加了油之后这个分支上就要将gas[]对应的位置的值赋为0，但是进入下一个分支要将数组还原。
+在主函数中就是依次将每个station作为起始，看是否可以循环一圈儿。
+在面试的时候遇到这个问题，还要向面试官问清是只要能循环到起始位置就行，还是要到起始位置时恰好用完gas。
+*/
+
+// improved one:
+public class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int sum = 0;
+        int count = 0;
+        for (int i = 0; i < gas.length; i ++){
+            sum = 0;
+            int j = i;
+            count = 0;
+            while (count < gas.length){
+                j = j % gas.length;
+                sum = sum + gas[j] - cost[j];
+                if (sum < 0) break;
+                j = j + 1;
+                count ++;
+            }
+            if (sum >= 0) return i;
+        }
+        return -1;
+    }
+}
+/*
+其实就是简单的从每个地方开始，全部累加起来看绕一圈有没有不合法的情况出现，若是没有，最后sum >= 0了，就说明该位置可行。
+*/
+
+// discuss 
+public class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int S = gas[0] - cost[0];
+        int sum = 0;
+        int start = 0;
+        for (int i = 0; i < gas.length; i++){
+            int tmp = gas[i] - cost[i];
+            sum = sum + tmp;
+            if (S < 0) {
+                S = tmp;
+                start = i;
+            }
+            else S = S + tmp;
+        }
+        if (sum < 0) return -1;
+        else return start;
+    }
+}
+
+/*
+Discuss上说是求gas[] - cost[]的最大子序列和问题，可是不明白为什么可以这样做。
+*/
