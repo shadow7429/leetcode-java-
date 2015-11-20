@@ -1,0 +1,32 @@
+// https://leetcode.com/problems/word-ladder/
+
+/*
+这道题自己的解决方法出现了理解上的错误，对于已经走过的节点其实是不会再走了，之前想的是经过变换可能再回到同一样节点，但是如果
+是这样的话，前一次变换的过程就是多余的了。其他的就是用queue实现的bfs。
+*/
+public int ladderLength(String start, String end, Set<String> dict) {
+    LinkedList<String> queue = new LinkedList<String>();
+    queue.add(start);
+    dict.add(end);
+    int step = 0;
+    while (!queue.isEmpty()) {
+        LinkedList<String> level = new LinkedList<String>();
+        step++;
+        while (!queue.isEmpty()) {
+            String q = queue.pollFirst();
+            if (q.equals(end))
+                return step;
+            for (int i = 0; i < start.length(); i++) {
+                for (char c = 'a'; c <= 'z'; c++) {
+                    String s = q.substring(0, i) + c + q.substring(i + 1, start.length());
+                    if (dict.contains(s)) {
+                        level.add(s);
+                        dict.remove(s);
+                    }
+                }
+            }
+        }
+        queue = level;
+    }
+    return 0;
+}
