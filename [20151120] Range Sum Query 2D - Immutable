@@ -1,0 +1,39 @@
+// https://leetcode.com/problems/range-sum-query-2d-immutable/
+
+/*
+这道题的第一反应就是每一次访问的时候用两层循环进行加和运算，这个时候就出现了重复工作问题，由此可知道，应该用dp。
+那么dp该如何用，分析这道题，重复工作的地方在哪里？可以看到重复工作的地方在于一遍遍的循环加和，首先创建NumMatrix
+的时候已经要双层循环把所有matrix的元素保存下来了，但是在每一次sumRegion被调用的时候还要再循环加和，而且提示中
+已经说明了，要调用很多次sumRegion函数，因此题目就在暗示我们要用dp解决。所以就想办法，可不可以在将matrix保存下来
+的过程中就避免之后的循环。
+解决办法：我们知道dp问题是用对于某一点的问题可以用前面的来解决。因此如果我们sumRegion函数的参数是(int row1, 
+int col1, int row2, int col2)， 那么如果较大的是row1，col1，那么我们就想通过平面内的几何图形之间的关系来求出想要
+的结果。因此dp[][]数组里存的是(0, 0, i, j)的面积，对于不是从(0, 0)开始的点可知只需要对一些图形面积进行加减即可得
+到。
+*/
+
+public class NumMatrix {
+    private int [][] dp;
+    public NumMatrix(int[][] matrix) {
+        if (matrix == null ||
+            matrix.length == 0 ||
+            matrix[0].length == 0) return;
+        int m = matrix.length;
+        int n = matrix[0].length;
+        dp = new int[m + 1][n + 1];
+        dp[0][0] = 0;
+        for (int i = 1; i <= m; i ++){
+            for (int j = 1; j <= n; j++){
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1] - dp[i - 1][j - 1] + matrix[i - 1][j - 1];
+            }
+        }
+    }
+
+    public int sumRegion(int row1, int col1, int row2, int col2) {
+        int imin = Math.min(row1, row2);
+        int imax = Math.max(row1, row2);
+        int jmax = Math.max(col1, col2);
+        int jmin = Math.min(col1, col2);
+        return dp[imax + 1][jmax + 1] - dp[imax + 1][jmin] - dp[imin][jmax + 1] + dp[imin][jmin];
+    }
+}
