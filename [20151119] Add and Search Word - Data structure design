@@ -1,5 +1,67 @@
 // https://leetcode.com/problems/add-and-search-word-data-structure-design/
 
 /*
-
+这道题又是trie问题，并没想起来要用这个数据结构，第一反应还是字符串的匹配问题，所以毫无意外的time limited了。
+https://zh.wikipedia.org/wiki/Trie
+需要注意的地方是当出现'.'的时候，要对parent的每一个child都进行递归操作。
+对于trie的几个理清：
+(1) root节点上没有字符信息，就是空的。
+(2) 每个节点都有一个大小为[26]的children array，该节点的字符并不是通过给这个数组赋值得到，而是如果该节点的children中有字符i，则
+将children[i - 'a'] = new TrieNode()；这样如果一个地方不是null，就说明该节点对应的字符是这个index。
+(3) 当要search的string走到末尾，index == string.length()的时候，就要判断在trie tree中，该节点处的isLeaf（或isWord）是不是true，
+如果不是，则说明这个string在这个tree中只是作为prefix存在而不是作为word，那么search的结果仍然为false；
 */
+public class WordDictionary {
+    private class WordNode{
+        boolean isLeaf;
+        WordNode[] children = new WordNode[26];
+    }
+    WordNode root = new WordNode();
+    // Adds a word into the data structure.
+    public void addWord(String word) {
+        char[] chars = word.toCharArray();
+        addWord(chars, 0, root);
+    }
+    public void addWord(char[] chars, int index, WordNode parent){
+        char c = chars[index];
+        int idx = c - 'a';
+        WordNode node = parent.children[idx];
+        if (node == null){
+            node  = new WordNode();
+            parent.children[idx] = node;
+        }
+        if (chars.length == index + 1) {
+            node.isLeaf = true;
+            return;
+        }
+        addWord(chars, index + 1, node);
+    }
+
+    // Returns if the word is in the data structure. A word could
+    // contain the dot character '.' to represent any one letter.
+    public boolean search(String word) {
+        char[] chars = word.toCharArray();
+        return search(chars, 0, root);
+    }
+    public boolean search(char[] chars, int index, WordNode parent){
+        if (index == chars.length){
+            if (parent.isLeaf == true) return true;
+            else return false;
+        }
+        char c = chars[index];
+        if (c == '.'){
+            for (int i = 0; i < parent.children.length; i++){
+                WordNode n = parent.children[i];
+                if (n != null){
+                    boolean b = search(chars, index + 1, n);
+                    if (b) return true;
+                }
+            }
+            return false;
+        }
+        int idx = c - 'a';
+        WordNode node  = parent.children[idx];
+        if (node == null) return false;
+        return search(chars, index + 1, node);
+    } 
+}
