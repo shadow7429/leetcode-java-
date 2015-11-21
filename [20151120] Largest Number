@@ -1,0 +1,37 @@
+// https://leetcode.com/problems/largest-number/
+
+
+// 这道题主要是考察了Comparator的了解程度，奈何我并不了解。
+/*
+http://www.tutorialspoint.com/java/java_using_comparator.htm
+我们一般进行排序的时候，如果想要自己定义按照什么排序，需要重写类Comparator中的compare函数，
+具体方法就是传入两个对象，例如如下代码中写的，然后如果因为本身compare的方法就是两个对象，
+如果(x1, x2)中x1 > x2则返回正数，x1 == x2返回0，x1 < x2返回负数，所以重写的compare函数也要
+遵循这个法则，就是如果最后返回的是正数，则说明传入的第一个参数大于第二个参数，以此类推。
+所以我们可以改变它的return。
+定义了比较方法之后，我们就可以用Collections或者Arrays中的sort函数来进行排序了，在sort函数中
+除了传入想要进行排序的数据之外，传入我们刚刚定义的一个Comparator实体，作为两个对象比较的方法。
+*/
+
+public class Solution {
+    public String largestNumber(int[] nums) {
+        if (nums == null || nums.length == 0) return "";
+        String[] Snum = new String[nums.length];
+        for (int i = 0; i < nums.length; i++) Snum[i] = nums[i] +"";
+        
+        Comparator<String> comp = new Comparator<String>(){
+            public int compare(String st1, String st2){
+                String s1 = st1 + st2;
+                String s2 = st2 + st1;
+                return s1.compareTo(s2);
+            }
+        };
+        
+        Arrays.sort(Snum, comp);
+        if(Snum[Snum.length - 1].charAt(0) == '0') return "0";
+        
+        StringBuilder res = new StringBuilder();
+        for (String s : Snum) res.insert(0, s);
+        return res.toString();
+    }
+}
