@@ -3,7 +3,7 @@
 // https://leetcode.com/problems/contains-duplicate-iii/
 
 /*
-我就属于那种做两遍也记不住的人，做过这道题的降级版，还记得用的是一个我没接触过的TreeSet的
+我就属于那种做两遍也记不住的人，做过这道题，还记得用的是一个我没接触过的TreeSet的
 ceiling和floor来做的，但是现在就是想不起怎么用的，然后只能先拿出brute方法。
 */
 
@@ -18,6 +18,24 @@ public class Solution {
                 if (i == j) continue;
                 if (nums[i] >= nums[j] - t && nums[i] <= nums[j] + t) return true;
             }
+        }
+        return false;
+    }
+}
+
+// TreeSet版本
+public class Solution {
+    public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+        if (nums.length == 0 || nums.length == 1) return false;
+        TreeSet<Integer> s = new TreeSet<Integer>();
+        
+        for (int i = 0; i < nums.length; i ++){
+            Integer f = s.floor(nums[i] + t);
+            Integer c = s.ceiling(nums[i] - t);
+            if ((f != null && f >= nums[i]) ||
+                (c != null && c <= nums[i])) return true;
+            s.add(nums[i]);
+            if (i >= k) s.remove(nums[i - k]);
         }
         return false;
     }
