@@ -1,0 +1,69 @@
+// https://leetcode.com/problems/surrounded-regions/
+
+/*
+这道题我的思路就是遍历这个二维数组的每一个点，对于然后递归调用，对于那些符合要求的'O'进行替换，对于不符合的就不动，
+但是这样非常浪费时间，会出现time limited。
+*/
+
+public class Solution {
+    public class Pair{
+        public int first;
+        public int second;
+        public Pair(int f, int s){
+            first = f;
+            second = s;
+        }
+    }
+    public void solve(char[][] board) {
+        if (board == null || board.length == 0) return;
+        for (int i = 0; i < board[0].length; i++){
+            if (board[0][i] == 'O') helper(board, 0, i);
+        }
+        for (int i = 0; i < board[board.length - 1].length; i++){
+            if (board[board.length - 1][i] == 'O') helper(board, board.length - 1, i);
+        }
+        for (int i = 0; i < board.length; i++){
+            if (board[i][0] == 'O') helper(board, i, 0);
+        }
+        for (int i = 0; i < board.length; i++){
+            if (board[i][board[i].length - 1] == 'O') helper(board, i, board[i].length - 1);
+        }
+        
+        for (int i = 0; i < board.length; i++){
+            for (int j = 0; j < board[i].length; j ++){
+                if (board[i][j] == 'O') board[i][j] = 'X';
+                else if (board[i][j] == 'U') board[i][j] = 'O';
+            }
+        }
+        return ;
+    }
+    
+    public void helper(char[][] board, int r, int c){
+        int[] dirX = {-1, 0, 1, 0};                            // 0
+        int[] dirY = {0, -1, 0, 1};                            // 1
+        ArrayDeque<Pair> stack = new ArrayDeque<Pair>();
+        stack.push(new Pair(r, c));
+        while(!stack.isEmpty()){
+            Pair p = stack.pop();
+            board[p.first][p.second] = 'U';
+            for (int i = 0; i < dirX.length; i++){
+                if (p.first + dirX[i] >= 0 &&
+                    p.first + dirX[i] < board.length &&
+                    p.second + dirY[i] >= 0 &&
+                    p.second + dirY[i] < board[p.first + dirX[i]].length &&
+                    board[p.first + dirX[i]][p.second + dirY[i]] == 'O'){
+                        stack.push(new Pair(p.first + dirX[i], p.second + dirY[i]));
+                    }
+            }
+        }
+    }
+}
+/*
+Dis上的方法是：因为题目中要求的如果O是在边边上，或者与边边上的O相连的，那么这个O不能被替换，因此这个问题就简化成遍历一遍边边上的字符，
+如果是O，则递归看它四周与它相邻的'O'，最后我们要将这些'O'保留，将其他的'O'替换成X，因此我们就先将这些O替换成其他字符，最后遍历一遍二
+维数组，进行替换即可。
+这里要学习的方法是：
+（0） 对点坐标求相邻的四个左边的方法可以用上述代表标出的形式来表示，比较明晰。
+（2） 递归最好用stack来实现。
+对于问题的分析要清楚，知道题目最后想要到达什么效果。
+*/
