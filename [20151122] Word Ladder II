@@ -1,0 +1,49 @@
+// startTime: 21: 05
+// finishTime: 22: 25
+// https://leetcode.com/problems/word-ladder-ii/
+
+// 这道题拿到lintcode上跑了下测例，程序的结果应该是对的，但是不符合时间复杂度的要求。算是brute one。
+
+public class Solution {
+    public int length = Integer.MAX_VALUE;
+    public List<List<String>> res = new LinkedList<List<String>>();
+    
+    public List<List<String>> findLadders(String beginWord, String endWord, Set<String> wordList) {
+        helper(beginWord, new LinkedList<String>(), endWord, wordList);
+        System.out.println(length);
+        List<List<String>> Res = new LinkedList<List<String>>();
+        for (List<String> l : res){
+            if (l.size() == length) Res.add(l);
+        }
+        
+        return Res;
+    }
+    
+    public void helper(String currentString, LinkedList<String> prePath, String target, Set<String> wordList){
+        prePath.add(currentString);
+        if (currentString.equals(target) && prePath.size() <= length){
+            LinkedList<String> a = new LinkedList<String>();
+            a.addAll(prePath);
+            res.add(a);
+            length = prePath.size();
+            prePath.removeLast();
+            return;
+        }
+        else if (prePath.size() >= length){
+            prePath.removeLast();
+            return;
+        } 
+        
+        for (int i = 0; i < currentString.length(); i++){
+            for (char c = 'a'; c <= 'z'; c++){
+                String tmp = currentString.substring(0, i) + c + currentString.substring(i + 1, currentString.length());
+                if (wordList.contains(tmp) && !prePath.contains(tmp)){
+                    helper(tmp, prePath, target, wordList);
+                }
+            }
+        }
+        prePath.removeLast();
+        return;
+    }
+    
+}
