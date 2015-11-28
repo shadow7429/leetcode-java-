@@ -1,0 +1,23 @@
+// startTime: 12: 28
+// finishTime: 12: 52
+// https://leetcode.com/problems/h-index/
+
+
+/*
+因为这里面两边的限制条件有交集，一个是小于等于一个是大于等于，所以需要对count值取个数和值之间的最小值。
+*/
+public class Solution {
+    public int hIndex(int[] citations) {
+        if (citations.length == 0) return 0;
+        int count = 0;
+        Arrays.sort(citations);
+        for (int i = citations.length - 1; i >= 0; i--){
+            count = citations.length - i;
+            if (i == 0 || (citations[i - 1] <= count && citations[i] >= count)) {
+                count = Math.min(count, citations[i]);
+                break;
+            }
+        }
+        return count;
+    }
+}
