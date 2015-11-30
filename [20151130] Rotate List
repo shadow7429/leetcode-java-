@@ -1,0 +1,35 @@
+// startTime: 10: 16
+// finishTime: 10: 30
+// https://leetcode.com/problems/rotate-list/
+
+/*
+记得以前做的时候少考虑的地方是k可以大于len，当时是试图走到倒数第k个位置然后一次完成，too young。
+现在是每次只移动最后一个node，这里节省时间做的是先如果list的len==n，那么移动n次list是跟原始的是
+一样的，所以我们只需要移动k % len次即可。
+*/
+public class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null) return null;
+        int i = 0;
+        ListNode pre = head;
+        ListNode tail = head;
+        int len = 1;
+        while (pre.next != null){
+            pre = pre.next;
+            len ++;
+        }
+        k = k % len;
+        pre = head;
+        while (i < k){
+            while (tail.next != null){
+                pre = tail;
+                tail = tail.next;
+            }
+            pre.next = null;
+            if (tail != head) tail.next = head;
+            head = tail;
+            i++;
+        }
+        return head;
+    }
+}
